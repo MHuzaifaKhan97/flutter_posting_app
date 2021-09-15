@@ -15,6 +15,8 @@ class AuthController extends GetxController {
   final signUpPasswordC = TextEditingController();
   // Auth State Listener
   Stream<User?> get streamAuthStatus => auth.authStateChanges();
+  // Loader Boolean
+  RxBool isLoading = false.obs;
 
   // signup(String email, String password) async {
   //   try {
@@ -106,8 +108,11 @@ class AuthController extends GetxController {
       return;
     }
     try {
+      isLoading(true);
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
+      isLoading(false);
+
       Get.offAll(HomeScreen());
       // if (userCredential.user!.emailVerified) {
       //   Get.offAll(HomeScreen());
@@ -135,6 +140,8 @@ class AuthController extends GetxController {
       //   }
       // }
     } on FirebaseAuthException catch (e) {
+      isLoading(false);
+
       if (e.code == 'user-not-found') {
         Get.defaultDialog(
             title: 'Warning',
