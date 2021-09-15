@@ -74,9 +74,10 @@ class LoginScreen extends StatelessWidget {
                     minimumSize: Size.fromHeight(45),
                     primary: Color(0xFFA31103)),
                 onPressed: () async {
-                  // await authController.login(
-                  //     loginController.emailController.text,
-                  //     loginController.passwordController.text);
+                  await authController.login(
+                      context,
+                      authController.loginEmailC.text,
+                      authController.loginPasswordC.text);
                 },
                 child: Text(
                   'Login',

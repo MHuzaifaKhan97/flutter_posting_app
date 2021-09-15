@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_posting_app/screens/home_screen.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
@@ -70,59 +71,93 @@ class AuthController extends GetxController {
   //   }
   // }
 
-  // login(String email, String password) async {
-  //   try {
-  //     UserCredential userCredential = await auth.signInWithEmailAndPassword(
-  //         email: email, password: password);
-  //     if (userCredential.user!.emailVerified) {
-  //       Get.offAll(HomeScreen());
-  //     } else {
-  //       var response = await Get.defaultDialog(
-  //           title: 'Email Verification',
-  //           titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-  //           middleText: 'Your email is not verified.',
-  //           confirm: ElevatedButton(
-  //               onPressed: () {
-  //                 Get.back(result: true);
-  //               },
-  //               child: Text('Click to verify')));
-  //       if (response != null && response == true) {
-  //         await userCredential.user!.sendEmailVerification();
-  //         Get.defaultDialog(
-  //             title: 'Email Verification',
-  //             titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-  //             middleText: 'A verification link is sent to $email.',
-  //             confirm: ElevatedButton(
-  //                 onPressed: () {
-  //                   Get.back();
-  //                 },
-  //                 child: Text('Okay')));
-  //       }
-  //     }
-  //   } on FirebaseAuthException catch (e) {
-  //     if (e.code == 'user-not-found') {
-  //       Get.defaultDialog(
-  //           title: 'Warning',
-  //           titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-  //           middleText: 'No user found',
-  //           confirm: ElevatedButton(
-  //               onPressed: () {
-  //                 Get.back();
-  //               },
-  //               child: Text('Okay')));
-  //     } else if (e.code == 'wrong-password') {
-  //       Get.defaultDialog(
-  //           title: 'Warning',
-  //           titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-  //           middleText: 'Username or password is incorrect',
-  //           confirm: ElevatedButton(
-  //               onPressed: () {
-  //                 Get.back();
-  //               },
-  //               child: Text('Okay')));
-  //     }
-  //   }
-  // }
+  login(BuildContext context, String email, String password) async {
+    if (email == "") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Email is required"),
+          backgroundColor: Color(0xFFA31103),
+        ),
+      );
+      return;
+    } else if (!GetUtils.isEmail(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Email is badly formatted"),
+          backgroundColor: Color(0xFFA31103),
+        ),
+      );
+      return;
+    } else if (password == "") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Password is required"),
+          backgroundColor: Color(0xFFA31103),
+        ),
+      );
+      return;
+    } else if (password.length < 8) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Password length must be 8 characters"),
+          backgroundColor: Color(0xFFA31103),
+        ),
+      );
+      return;
+    }
+    try {
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+          email: email, password: password);
+      Get.offAll(HomeScreen());
+      // if (userCredential.user!.emailVerified) {
+      //   Get.offAll(HomeScreen());
+      // } else {
+      //   var response = await Get.defaultDialog(
+      //       title: 'Email Verification',
+      //       titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+      //       middleText: 'Your email is not verified.',
+      //       confirm: ElevatedButton(
+      //           onPressed: () {
+      //             Get.back(result: true);
+      //           },
+      //           child: Text('Click to verify')));
+      //   if (response != null && response == true) {
+      //     await userCredential.user!.sendEmailVerification();
+      //     Get.defaultDialog(
+      //         title: 'Email Verification',
+      //         titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+      //         middleText: 'A verification link is sent to $email.',
+      //         confirm: ElevatedButton(
+      //             onPressed: () {
+      //               Get.back();
+      //             },
+      //             child: Text('Okay')));
+      //   }
+      // }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        Get.defaultDialog(
+            title: 'Warning',
+            titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            middleText: 'No user found',
+            confirm: ElevatedButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text('Okay')));
+      } else if (e.code == 'wrong-password') {
+        Get.defaultDialog(
+            title: 'Warning',
+            titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+            middleText: 'Username or password is incorrect',
+            confirm: ElevatedButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text('Okay')));
+      }
+    }
+  }
 
   void logout() async {
     await auth.signOut();
