@@ -17,6 +17,8 @@ class CustomTextFieldWidget extends StatefulWidget {
     this.prefixText,
     this.type,
     this.textCapitalization = TextCapitalization.none,
+    this.minLines = 1,
+    this.maxLines = 1,
     // this.fillColor = null,
     // this.textColor = null,
     this.maxLength = 30,
@@ -48,6 +50,8 @@ class CustomTextFieldWidget extends StatefulWidget {
   final bool readOnly;
   final List<TextInputFormatter>? inputFormatters;
   final TextCapitalization textCapitalization;
+  final int minLines;
+  final int maxLines;
 
   @override
   _CustomTextFieldWidgetState createState() => _CustomTextFieldWidgetState();
@@ -69,6 +73,8 @@ class _CustomTextFieldWidgetState extends State<CustomTextFieldWidget> {
       child: TextFormField(
         inputFormatters: widget.inputFormatters,
         readOnly: widget.readOnly,
+        minLines: widget.minLines,
+        maxLines: widget.maxLines,
         // style: new TextStyle(
         //     color: textColor == null
         //         ? ThemeConstants.primaryTextColor

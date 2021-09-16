@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_posting_app/controllers/auth_controller.dart';
+import 'package:flutter_posting_app/screens/addpost_screen.dart';
 import 'package:flutter_posting_app/screens/login_screen.dart';
 import 'package:flutter_posting_app/screens/splash_screen.dart';
 import 'package:flutter_posting_app/widgets/loading_widget.dart';
@@ -34,8 +35,8 @@ class MyApp extends StatelessWidget {
                 Theme.of(context).textTheme,
               ),
             ),
-            // home: LoginScreen(),
-            home: snapshot.data != null ? HomeScreen() : SplashScreen(),
+            home: AddPostScreen(),
+            // home: snapshot.data != null ? HomeScreen() : SplashScreen(),
           );
         }
         return LoadingWidget();
