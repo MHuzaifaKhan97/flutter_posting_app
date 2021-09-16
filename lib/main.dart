@@ -34,8 +34,8 @@ class MyApp extends StatelessWidget {
                 Theme.of(context).textTheme,
               ),
             ),
-            home: LoginScreen(),
-            // home: snapshot.data != null ? HomeScreen() : SplashScreen(),
+            // home: LoginScreen(),
+            home: snapshot.data != null ? HomeScreen() : SplashScreen(),
           );
         }
         return LoadingWidget();

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_posting_app/screens/home_screen.dart';
+import 'package:flutter_posting_app/screens/login_screen.dart';
 import 'package:get/get.dart';
 
 class AuthController extends GetxController {
@@ -14,11 +15,19 @@ class AuthController extends GetxController {
   final signUpPasswordC = TextEditingController();
   // Forgot Password Email Controller
   final forgotPasswordEmailC = TextEditingController();
-
+  // User Credentials
+  // bool isUserVerified = false;
+  // String userEmail = "";
+  // UserCredential? userCredential;
   // Auth State Listener
   Stream<User?> get streamAuthStatus => auth.authStateChanges();
   // Loader Boolean
   RxBool isLoading = false.obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+  }
 
   signup(BuildContext context, String email, String password) async {
     if (email == "") {
@@ -139,6 +148,7 @@ class AuthController extends GetxController {
       isLoading(true);
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
+
       isLoading(false);
 
       Get.offAll(HomeScreen());
@@ -173,6 +183,7 @@ class AuthController extends GetxController {
 
   logout() async {
     await auth.signOut();
+    Get.offAll(LoginScreen());
   }
 
   forgotPassword(BuildContext context, String email) async {
@@ -220,4 +231,30 @@ class AuthController extends GetxController {
               child: Text('Okay')));
     }
   }
+
+  // sendEmailVerification() async {
+  //   try {
+  //     await userCredential!.user!.sendEmailVerification();
+  //     Get.defaultDialog(
+  //         title: 'Email Verification',
+  //         titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+  //         middleText: 'A verification link is sent to $userEmail.',
+  //         confirm: ElevatedButton(
+  //             onPressed: () {
+  //               Get.back();
+  //             },
+  //             child: Text('Okay')));
+  //   } on FirebaseAuthException catch (e) {
+  //     Get.defaultDialog(
+  //         title: 'Email Verification',
+  //         titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+  //         middleText: e.message.toString(),
+  //         confirm: ElevatedButton(
+  //             onPressed: () {
+  //               Get.back();
+  //             },
+  //             child: Text('Okay')));
+  //   }
+  // }
+
 }

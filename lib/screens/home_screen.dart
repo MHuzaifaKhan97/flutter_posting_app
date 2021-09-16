@@ -5,40 +5,82 @@ import 'package:flutter_posting_app/widgets/custom_textField.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final authController = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Image.asset(
-                './assets/logo.png',
-                scale: 12,
-                color: Colors.white,
+    return SafeArea(
+      child: Scaffold(
+          appBar: AppBar(
+            title: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      './assets/logo.png',
+                      scale: 12,
+                      color: Colors.white,
+                    ),
+                    SizedBox(width: 8),
+                    Text(
+                      'Posting App'.toUpperCase(),
+                      style: GoogleFonts.amaranth(fontSize: 26),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 12),
+                // ignore: unrelated_type_equality_checks
+                // authController.isUserVerified == true
+                //     ? Container()
+                //     : Row(
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: [
+                //           Text(
+                //             'You email is not verified',
+                //             style: TextStyle(
+                //                 fontSize: 14, color: Colors.orange[400]),
+                //           ),
+                //           SizedBox(width: 4),
+                //           GestureDetector(
+                //             onTap: () {
+                //               authController.sendEmailVerification();
+                //               setState(() {});
+                //             },
+                //             child: Text(
+                //               'Verify Email',
+                //               style: TextStyle(
+                //                   fontSize: 14,
+                //                   color: Colors.white,
+                //                   fontWeight: FontWeight.bold,
+                //                   decoration: TextDecoration.underline),
+                //             ),
+                //           ),
+                //         ],
+                //       )
+              ],
+            ),
+            centerTitle: true,
+            toolbarHeight: MediaQuery.of(context).size.height * 0.14,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(20),
               ),
-              SizedBox(width: 8),
-              Text(
-                'Posting App'.toUpperCase(),
-                style: GoogleFonts.amaranth(fontSize: 26),
-              ),
+            ),
+            actions: [
+              IconButton(
+                  onPressed: () => authController.logout(),
+                  icon: Icon(Icons.logout)),
+              SizedBox(width: 8)
             ],
           ),
-          centerTitle: true,
-          toolbarHeight: MediaQuery.of(context).size.height * 0.14,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(
-              bottom: Radius.circular(60),
-            ),
-          ),
-          actions: [
-            IconButton(
-                onPressed: () => authController.logout(),
-                icon: Icon(Icons.logout))
-          ],
-        ),
-        body: Container());
+          body: Container()),
+    );
   }
 }
