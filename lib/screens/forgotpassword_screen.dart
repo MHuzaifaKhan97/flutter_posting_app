@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_posting_app/controllers/auth_controller.dart';
-import 'package:flutter_posting_app/screens/forgotpassword_screen.dart';
 import 'package:flutter_posting_app/screens/signup_screen.dart';
 import 'package:flutter_posting_app/widgets/custom_textField.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginScreen extends StatelessWidget {
+class ForgotPasswordScreen extends StatelessWidget {
   final authController = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
@@ -35,50 +34,31 @@ class LoginScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: Obx(() {
-          return SingleChildScrollView(
-            child: Padding(
+        body: SingleChildScrollView(
+          child: Obx(() {
+            return Padding(
               padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 16),
               child: Column(
                 children: [
                   SizedBox(height: MediaQuery.of(context).size.height * 0.02),
                   Text(
-                    'Login'.toUpperCase(),
+                    'Forgot Password'.toUpperCase(),
                     style: GoogleFonts.amaranth(
-                        fontSize: 40, color: Color(0xFFA31103)),
+                        fontSize: 32, color: Color(0xFFA31103)),
                   ),
                   SizedBox(height: MediaQuery.of(context).size.height * 0.06),
                   CustomTextFieldWidget(
                     hintValue: 'Enter Email',
-                    controller: authController.loginEmailC,
+                    controller: authController.forgotPasswordEmailC,
                   ),
-                  SizedBox(height: 16),
-                  CustomTextFieldWidget(
-                    hintValue: 'Enter Password',
-                    controller: authController.loginPasswordC,
-                    obscureText: true,
-                  ),
-                  Align(
-                      alignment: Alignment.topRight,
-                      child: TextButton(
-                          onPressed: () => Get.off(ForgotPasswordScreen()),
-                          child: Text(
-                            "Forgot Password",
-                            style: TextStyle(
-                              color: Color(0xFFA31103),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ))),
                   SizedBox(height: 16),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
                         minimumSize: Size.fromHeight(45),
                         primary: Color(0xFFA31103)),
                     onPressed: () async {
-                      await authController.login(
-                          context,
-                          authController.loginEmailC.text,
-                          authController.loginPasswordC.text);
+                      await authController.forgotPassword(
+                          context, authController.forgotPasswordEmailC.text);
                     },
                     child: authController.isLoading.value
                         ? Padding(
@@ -86,29 +66,14 @@ class LoginScreen extends StatelessWidget {
                             child:
                                 CircularProgressIndicator(color: Colors.white))
                         : Text(
-                            'Login',
+                            'Forgot Password',
                             style: TextStyle(fontSize: 18),
                           ),
                   ),
-                  SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text('Don\'t have account?'),
-                      SizedBox(width: 2),
-                      GestureDetector(
-                        onTap: () => Get.off(RegisterScreen()),
-                        child: Text(
-                          'Register',
-                          style: TextStyle(color: Color(0xFFA31103)),
-                        ),
-                      )
-                    ],
-                  )
                 ],
               ),
-            ),
-          );
-        }));
+            );
+          }),
+        ));
   }
 }

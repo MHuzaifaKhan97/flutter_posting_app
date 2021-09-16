@@ -12,6 +12,9 @@ class AuthController extends GetxController {
   // Register Controllers
   final signUpEmailC = TextEditingController();
   final signUpPasswordC = TextEditingController();
+  // Forgot Password Email Controller
+  final forgotPasswordEmailC = TextEditingController();
+
   // Auth State Listener
   Stream<User?> get streamAuthStatus => auth.authStateChanges();
   // Loader Boolean
@@ -139,31 +142,6 @@ class AuthController extends GetxController {
       isLoading(false);
 
       Get.offAll(HomeScreen());
-      // if (userCredential.user!.emailVerified) {
-      //   Get.offAll(HomeScreen());
-      // } else {
-      //   var response = await Get.defaultDialog(
-      //       title: 'Email Verification',
-      //       titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-      //       middleText: 'Your email is not verified.',
-      //       confirm: ElevatedButton(
-      //           onPressed: () {
-      //             Get.back(result: true);
-      //           },
-      //           child: Text('Click to verify')));
-      //   if (response != null && response == true) {
-      //     await userCredential.user!.sendEmailVerification();
-      //     Get.defaultDialog(
-      //         title: 'Email Verification',
-      //         titleStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-      //         middleText: 'A verification link is sent to $email.',
-      //         confirm: ElevatedButton(
-      //             onPressed: () {
-      //               Get.back();
-      //             },
-      //             child: Text('Okay')));
-      //   }
-      // }
     } on FirebaseAuthException catch (e) {
       isLoading(false);
 
@@ -193,7 +171,53 @@ class AuthController extends GetxController {
     }
   }
 
-  void logout() async {
+  logout() async {
     await auth.signOut();
+  }
+
+  forgotPassword(BuildContext context, String email) async {
+    if (email == "") {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Email is required"),
+          backgroundColor: Color(0xFFA31103),
+        ),
+      );
+      return;
+    } else if (!GetUtils.isEmail(email)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Email is badly formatted"),
+          backgroundColor: Color(0xFFA31103),
+        ),
+      );
+      return;
+    }
+
+    try {
+      isLoading(true);
+      await auth.sendPasswordResetEmail(email: email);
+      Get.defaultDialog(
+          title: 'Forgot Password',
+          middleText: 'A change password email is sent to $email',
+          confirm: ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: Color(0xFFA31103)),
+              onPressed: () {
+                Get.back();
+              },
+              child: Text('Okay')));
+      isLoading(false);
+    } on FirebaseAuthException catch (e) {
+      isLoading(false);
+      Get.defaultDialog(
+          title: 'Error',
+          middleText: e.message.toString(),
+          confirm: ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: Color(0xFFA31103)),
+              onPressed: () {
+                Get.back();
+              },
+              child: Text('Okay')));
+    }
   }
 }
