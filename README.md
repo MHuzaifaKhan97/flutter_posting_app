@@ -1,5 +1,11 @@
 # Flutter Posting Application:
 
+## Functionalities:
+
+### - Login.
+### - Register.
+### - Forgot Password.
+### - Add/Update/Delete/Fetch Posts.
 
 ![Splash Screen](https://github.com/MHuzaifaKhan97/flutter_posting_app/blob/master/screenshots/splash.png)
 ![Login Screen](https://github.com/MHuzaifaKhan97/flutter_posting_app/blob/master/screenshots/login.png)
