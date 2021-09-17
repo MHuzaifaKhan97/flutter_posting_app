@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_posting_app/controllers/auth_controller.dart';
 import 'package:flutter_posting_app/controllers/post_controller.dart';
 import 'package:flutter_posting_app/screens/addpost_screen.dart';
+import 'package:flutter_posting_app/screens/editpost_screen.dart';
 import 'package:flutter_posting_app/screens/signup_screen.dart';
 import 'package:flutter_posting_app/widgets/card_widget.dart';
 import 'package:flutter_posting_app/widgets/custom_textField.dart';
@@ -118,6 +119,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 date: (listOfPosts[index].data()
                                     as Map<String, dynamic>)["date"],
                                 onUpdatePress: () {
+                                  Get.offAll(EditPostScreen(
+                                    title: (listOfPosts[index].data()
+                                        as Map<String, dynamic>)["title"],
+                                    desc: (listOfPosts[index].data()
+                                        as Map<String, dynamic>)["desc"],
+                                    imageURL: (listOfPosts[index].data()
+                                        as Map<String, dynamic>)["imageURL"],
+                                    docId: listOfPosts[index].id,
+                                  ));
                                   print("updatePressed");
                                 },
                                 OnDeletePress: () async {

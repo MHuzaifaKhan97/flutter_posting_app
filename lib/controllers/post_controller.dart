@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_posting_app/screens/home_screen.dart';
 import 'package:get/get.dart';
 
 class PostController extends GetxController {
@@ -113,6 +114,39 @@ class PostController extends GetxController {
             },
             child: Text('Okay')),
       );
+    } on FirebaseException catch (e) {
+      Get.defaultDialog(title: 'Error', content: Text(e.message.toString()));
+    }
+  }
+
+  // Update Post
+  updatePost(
+      BuildContext context, String title, String desc, String docId) async {
+    DocumentReference post = firestore.collection('posts').doc(docId);
+    try {
+      var date = DateTime.now().toString().split('.')[0];
+
+      isLoading(true);
+      await post.update(
+          {"title": title, "desc": desc, "imageURL": imageURL, "date": date});
+      isLoading(false);
+
+      var res = await Get.defaultDialog(
+        title: "Post Update",
+        content: Text("Post Succesfully Updated"),
+        confirm: ElevatedButton(
+            style: ElevatedButton.styleFrom(primary: Color(0xFFA31103)),
+            onPressed: () {
+              postTitleC.clear();
+              postDescC.clear();
+              imageURL = "";
+              Get.back(result: true);
+            },
+            child: Text('Okay')),
+      );
+      if (res) {
+        Get.off(HomeScreen());
+      }
     } on FirebaseException catch (e) {
       Get.defaultDialog(title: 'Error', content: Text(e.message.toString()));
     }
