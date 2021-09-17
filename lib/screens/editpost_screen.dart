@@ -95,14 +95,12 @@ class _EditPostScreenState extends State<EditPostScreen> {
                     minLines: 3,
                     maxLines: 5,
                   ),
-                  SizedBox(height: 14),
                   postController.imageURL != ""
                       ? Container(
                           width: 200,
                           height: 200,
                           child: Image.network(widget.imageURL))
                       : Container(),
-                  SizedBox(height: 14),
                   task != null ? buildUploadStatus(task!) : Container(),
                   SizedBox(height: 6),
 
