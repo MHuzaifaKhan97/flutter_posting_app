@@ -6,6 +6,7 @@ import 'package:flutter_posting_app/screens/addpost_screen.dart';
 import 'package:flutter_posting_app/screens/signup_screen.dart';
 import 'package:flutter_posting_app/widgets/card_widget.dart';
 import 'package:flutter_posting_app/widgets/custom_textField.dart';
+import 'package:flutter_posting_app/widgets/loading_widget.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -90,41 +91,64 @@ class _HomeScreenState extends State<HomeScreen> {
               if (snapshot.connectionState == ConnectionState.active) {
                 print(snapshot.data!.docs);
                 var listOfPosts = snapshot.data!.docs;
-                return ListView.builder(
-                    itemCount: listOfPosts.length,
-                    itemBuilder: (context, index) {
-                      return CardWidget(
-                        title: (listOfPosts[index].data()
-                            as Map<String, dynamic>)["title"],
-                        desc: (listOfPosts[index].data()
-                            as Map<String, dynamic>)["desc"],
-                        imageURL: (listOfPosts[index].data()
-                            as Map<String, dynamic>)["imageURL"],
-                        date: (listOfPosts[index].data()
-                            as Map<String, dynamic>)["date"],
-                      );
-                      // return ListTile(
-                      //   // onTap: () => Get.to(
-                      //   // EditProductScreen(
-                      //   //   name: (listOfPosts[index].data()
-                      //   //       as Map<String, dynamic>)["name"],
-                      //   //   price: (listOfPosts[index].data()
-                      //   //       as Map<String, dynamic>)["price"],
-                      //   // ),
-                      //   // arguments: listOfPosts[index].id),
-                      //   title: Text((listOfPosts[index].data()
-                      //       as Map<String, dynamic>)["title"]),
-                      //   subtitle: Text((listOfPosts[index].data()
-                      //       as Map<String, dynamic>)["desc"]),
-                      //   trailing: IconButton(
-                      //     icon: Icon(Icons.delete),
-                      //     onPressed: () async {
-                      //       // await homeController
-                      //       //     .deleteProduct(listOfProducts[index].id);
-                      //     },
-                      //   ),
-                      // );
-                    });
+                return postController.isLoading.value
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: Color(0xFFA31103),
+                        ),
+                      )
+                    : listOfPosts.length == 0
+                        ? Center(
+                            child: Text(
+                              'No Post Added Yet.',
+                              style: TextStyle(
+                                  color: Color(0xFFA31103), fontSize: 22),
+                            ),
+                          )
+                        : ListView.builder(
+                            itemCount: listOfPosts.length,
+                            itemBuilder: (context, index) {
+                              return CardWidget(
+                                title: (listOfPosts[index].data()
+                                    as Map<String, dynamic>)["title"],
+                                desc: (listOfPosts[index].data()
+                                    as Map<String, dynamic>)["desc"],
+                                imageURL: (listOfPosts[index].data()
+                                    as Map<String, dynamic>)["imageURL"],
+                                date: (listOfPosts[index].data()
+                                    as Map<String, dynamic>)["date"],
+                                onUpdatePress: () {
+                                  print("updatePressed");
+                                },
+                                OnDeletePress: () async {
+                                  await postController
+                                      .deleteProduct(listOfPosts[index].id);
+                                  print("Delete Pressed");
+                                  setState(() {});
+                                },
+                              );
+                              // return ListTile(
+                              //   // onTap: () => Get.to(
+                              //   // EditProductScreen(
+                              //   //   name: (listOfPosts[index].data()
+                              //   //       as Map<String, dynamic>)["name"],
+                              //   //   price: (listOfPosts[index].data()
+                              //   //       as Map<String, dynamic>)["price"],
+                              //   // ),
+                              //   // arguments: listOfPosts[index].id),
+                              //   title: Text((listOfPosts[index].data()
+                              //       as Map<String, dynamic>)["title"]),
+                              //   subtitle: Text((listOfPosts[index].data()
+                              //       as Map<String, dynamic>)["desc"]),
+                              //   trailing: IconButton(
+                              //     icon: Icon(Icons.delete),
+                              //     onPressed: () async {
+                              //       // await homeController
+                              //       //     .deleteProduct(listOfProducts[index].id);
+                              //     },
+                              //   ),
+                              // );
+                            });
               }
               return Center(child: CircularProgressIndicator());
             }),

@@ -39,6 +39,7 @@ class PostController extends GetxController {
     return posts.orderBy("date", descending: true).snapshots();
   }
 
+  // ADD Post
   addPost(BuildContext context, String title, String desc) async {
     CollectionReference posts = firestore.collection('posts');
 
@@ -91,6 +92,29 @@ class PostController extends GetxController {
           content: Text(e.message.toString()),
           onConfirm: () => Get.back(),
           textConfirm: "Okay");
+    }
+  }
+
+  // Delete Post
+  deleteProduct(String docId) async {
+    DocumentReference post = firestore.collection('posts').doc(docId);
+    try {
+      isLoading(true);
+      await post.delete();
+      isLoading(false);
+
+      Get.defaultDialog(
+        title: "Post Deleted",
+        content: Text("Post Succesfully Deleted"),
+        confirm: ElevatedButton(
+            style: ElevatedButton.styleFrom(primary: Color(0xFFA31103)),
+            onPressed: () {
+              Get.back();
+            },
+            child: Text('Okay')),
+      );
+    } on FirebaseException catch (e) {
+      Get.defaultDialog(title: 'Error', content: Text(e.message.toString()));
     }
   }
 }
