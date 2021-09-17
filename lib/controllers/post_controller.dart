@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ import 'package:get/get.dart';
 class PostController extends GetxController {
   final postTitleC = TextEditingController();
   final postDescC = TextEditingController();
+  FirebaseFirestore firestore = FirebaseFirestore.instance;
   String imageURL = "";
 
   UploadTask? uploadFile(String destination, File file) {
@@ -28,5 +30,11 @@ class PostController extends GetxController {
     } on FirebaseException catch (e) {
       return null;
     }
+  }
+
+  // Fetch Posts
+  Stream<QuerySnapshot<Object?>> streamData() {
+    CollectionReference products = firestore.collection('posts');
+    return products.orderBy("date").snapshots();
   }
 }

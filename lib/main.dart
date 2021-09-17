@@ -35,8 +35,8 @@ class MyApp extends StatelessWidget {
                 Theme.of(context).textTheme,
               ),
             ),
-            home: AddPostScreen(),
-            // home: snapshot.data != null ? HomeScreen() : SplashScreen(),
+            // home: AddPostScreen(),
+            home: snapshot.data != null ? HomeScreen() : SplashScreen(),
           );
         }
         return LoadingWidget();
