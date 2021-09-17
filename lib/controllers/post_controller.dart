@@ -11,6 +11,7 @@ class PostController extends GetxController {
   final postDescC = TextEditingController();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   String imageURL = "";
+  RxBool isLoading = false.obs;
 
   UploadTask? uploadFile(String destination, File file) {
     try {
@@ -34,7 +35,62 @@ class PostController extends GetxController {
 
   // Fetch Posts
   Stream<QuerySnapshot<Object?>> streamData() {
-    CollectionReference products = firestore.collection('posts');
-    return products.orderBy("date").snapshots();
+    CollectionReference posts = firestore.collection('posts');
+    return posts.orderBy("date", descending: true).snapshots();
+  }
+
+  addPost(BuildContext context, String title, String desc) async {
+    CollectionReference posts = firestore.collection('posts');
+
+    try {
+      if (title == "") {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Please enter post title"),
+          backgroundColor: Color(0xFFA31103),
+        ));
+        return;
+      }
+      if (desc == "") {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Please enter post descrption"),
+          backgroundColor: Color(0xFFA31103),
+        ));
+        return;
+      }
+      if (imageURL == "") {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text("Please select image"),
+          backgroundColor: Color(0xFFA31103),
+        ));
+        return;
+      } else {
+        var date = DateTime.now().toString().split('.')[0];
+        isLoading(true);
+
+        await posts.add(
+            {"title": title, "desc": desc, "imageURL": imageURL, "date": date});
+        isLoading(false);
+
+        Get.defaultDialog(
+          title: "Post Added",
+          content: Text("Post Succesfully Added"),
+          confirm: ElevatedButton(
+              style: ElevatedButton.styleFrom(primary: Color(0xFFA31103)),
+              onPressed: () {
+                postTitleC.clear();
+                postDescC.clear();
+                Get.back();
+                Get.back();
+              },
+              child: Text('Okay')),
+        );
+      }
+    } on FirebaseException catch (e) {
+      Get.defaultDialog(
+          title: "Error",
+          content: Text(e.message.toString()),
+          onConfirm: () => Get.back(),
+          textConfirm: "Okay");
+    }
   }
 }

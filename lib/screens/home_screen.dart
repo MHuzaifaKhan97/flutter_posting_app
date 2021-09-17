@@ -129,14 +129,26 @@ class _HomeScreenState extends State<HomeScreen> {
               return Center(child: CircularProgressIndicator());
             }),
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Color(0xFFA31103),
           onPressed: () {
             Get.to(AddPostScreen());
           },
-          child: Text(
-            'Add Post',
-            textAlign: TextAlign.center,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.add,
+                size: 32,
+              ),
+              // Text(
+              //   'Add',
+              //   textAlign: TextAlign.center,
+              // ),
+            ],
           ),
         ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       ),
     );
   }

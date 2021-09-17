@@ -100,12 +100,12 @@ class _AddPostScreenState extends State<AddPostScreen> {
                         minimumSize: Size.fromHeight(45),
                         primary: Color(0xFFA31103)),
                     onPressed: () async {
-                      await authController.login(
+                      await postController.addPost(
                           context,
-                          authController.loginEmailC.text,
-                          authController.loginPasswordC.text);
+                          postController.postTitleC.text,
+                          postController.postDescC.text);
                     },
-                    child: authController.isLoading.value
+                    child: postController.isLoading.value
                         ? Padding(
                             padding: const EdgeInsets.all(8.0),
                             child:
