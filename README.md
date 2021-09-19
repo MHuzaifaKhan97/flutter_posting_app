@@ -1,4 +1,4 @@
-# Flutter Posting Application:
+# Flutter Posting Application.
 
 ## Functionalities:
 
