@@ -29,6 +29,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
     final fileName = file != null ? basename(file!.path) : 'No File Selected';
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Color(0xFFA31103),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

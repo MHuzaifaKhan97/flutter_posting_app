@@ -12,6 +12,7 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
+          backgroundColor: Color(0xFFA31103),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [

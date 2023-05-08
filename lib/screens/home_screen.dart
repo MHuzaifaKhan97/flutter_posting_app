@@ -23,6 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xFFA31103),
         title: Column(
           children: [
             Row(
@@ -89,8 +90,8 @@ class _HomeScreenState extends State<HomeScreen> {
           stream: postController.streamData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.active) {
-              print(snapshot.data!.docs);
-              var listOfPosts = snapshot.data!.docs;
+              print(snapshot.data?.docs);
+              var listOfPosts = snapshot.data?.docs ?? [];
               return postController.isLoading.value
                   ? Center(
                       child: CircularProgressIndicator(
